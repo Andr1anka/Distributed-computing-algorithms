@@ -49,4 +49,6 @@ class Observer:
                     self.nodes.get(action.node_id).mailbox.remove_action(action)
             else:
                 print("No available action found")
+                for node in self.nodes.values():
+                    print(f"Node {node.node_id}, Visited: {node.visited}, Data: {node.data}")
             sleep(settings.ACTION_SLEEP_TIME_SECONDS)

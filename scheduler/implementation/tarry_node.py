@@ -6,6 +6,14 @@ from scheduler.core.action import Action
 from scheduler.core.mailbox import Mailbox
 from scheduler.core.node_response import NodeResponse
 
+class Colors:
+    RESET = "\033[0m"
+    RED = "\033[91m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    BLUE = "\033[94m"
+    MAGENTA = "\033[95m"
+    CYAN = "\033[96m"
 
 class TarryNode(AbstractNode):
 
@@ -29,9 +37,26 @@ class TarryNode(AbstractNode):
         self.vector_clock[self.node_id] = 0
 
     # ЛОГ
-    def log(self, text):
-        print(f"[{self.node_id} | L={self.lamport_clock} | V={self.vector_clock}] {text}")
+    def log(self, text, event_type="INFO"):
+        color = Colors.RESET
 
+        if "RECEIVED" in text:
+            color = Colors.BLUE
+        elif "SEND" in text:
+            color = Colors.GREEN
+        elif "RETURN" in text:
+            color = Colors.YELLOW
+        elif "FINISHED" in text:
+            color = Colors.RED
+        elif "STARTED" in text:
+            color = Colors.MAGENTA
+
+        print(
+            f"{color}[{self.node_id} | "
+            f"L={self.lamport_clock} | "
+            f"V={self.vector_clock}] "
+            f"{text}{Colors.RESET}"
+        )
     def process_action(self, message: Action) -> NodeResponse:
         # Лемпорт (отримання)
         incoming_clock = message.data.get("clock", 0)

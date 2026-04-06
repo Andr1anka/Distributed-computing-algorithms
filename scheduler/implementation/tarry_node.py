@@ -72,7 +72,6 @@ class TarryNode(AbstractNode):
         self.vector_clock[self.node_id] += 1
 
         self.log(f"RECEIVED ← {message.data.get('sender_id')} | data={message.data}")
-
         self.visited += 1
         new_message = self.process_message(message)
 

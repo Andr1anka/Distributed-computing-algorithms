@@ -3,7 +3,7 @@ from typing import List, Dict
 
 from scheduler.abstract.abstract_network import AbstractNetwork
 from scheduler.implementation.averbuch_sidon_node import AverbuchSidonNode
-from scheduler.core.action import Action   # ← Додай цей імпорт!
+from scheduler.core.action import Action
 
 
 class CurrentNetwork(AbstractNetwork):
@@ -41,7 +41,7 @@ class CurrentNetwork(AbstractNetwork):
 
             start_node.mailbox.add_inbox_action(action)
 
-            print(f"✅ Алгоритм Авербуха запущено з кореня: {start_node.node_id}")
+            print(f"Алгоритм Авербуха запущено з кореня: {start_node.node_id}")
 
     def __get_edges(self, ids: List[str]) -> Dict[str, List[str]]:
         self.edges = {

@@ -2,7 +2,7 @@ import uuid
 from typing import List, Dict
 
 from scheduler.abstract.abstract_network import AbstractNetwork
-from scheduler.implementation.node import Node
+from scheduler.implementation.lai_yang_node import LaiYangNode
 
 
 class CurrentNetwork(AbstractNetwork):
@@ -10,10 +10,15 @@ class CurrentNetwork(AbstractNetwork):
 
     def __init__(self) -> None:
         self.nodes = []
+
+        # можна залишити UUID (норм)
         ids = [uuid.uuid4() for _ in range(self.NUMBER_OF_NODES)]
+
         self.__get_edges(ids)
+
         for node_id in ids:
-            self.nodes.append(Node(node_id, self.edges[node_id]))
+            self.nodes.append(LaiYangNode(node_id, self.edges[node_id]))
+
         super().__init__(self.nodes)
 
     def __get_edges(self, ids: List[uuid.UUID]) -> Dict[uuid.UUID, List[uuid.UUID]]:

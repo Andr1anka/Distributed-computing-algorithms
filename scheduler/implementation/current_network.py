@@ -1,22 +1,41 @@
-import uuid
 from typing import List, Dict
 
 from scheduler.abstract.abstract_network import AbstractNetwork
-from scheduler.implementation.node import Node
+
+# ІМПОРТИ АЛГОРИТМІВ
+from scheduler.implementation.wave_node import WaveNode
+from scheduler.implementation.echo_node import EchoNode
+from scheduler.implementation.tree_node import TreeNode
 
 
 class CurrentNetwork(AbstractNetwork):
     NUMBER_OF_NODES = 8
 
-    def __init__(self) -> None:
+    def __init__(self, algorithm: str = "wave") -> None:
         self.nodes = []
-        ids = [uuid.uuid4() for _ in range(self.NUMBER_OF_NODES)]
+
+        ids = [f"Node-{i}" for i in range(self.NUMBER_OF_NODES)]
         self.__get_edges(ids)
+
+        #  ВИБІР АЛГОРИТМУ
+        NodeClass = self.__get_node_class(algorithm)
+
         for node_id in ids:
-            self.nodes.append(Node(node_id, self.edges[node_id]))
+            self.nodes.append(NodeClass(node_id, self.edges[node_id]))
+
         super().__init__(self.nodes)
 
-    def __get_edges(self, ids: List[uuid.UUID]) -> Dict[uuid.UUID, List[uuid.UUID]]:
+    def __get_node_class(self, algorithm: str):
+        if algorithm == "wave":
+            return WaveNode
+        elif algorithm == "echo":
+            return EchoNode
+        elif algorithm == "tree":
+            return TreeNode
+        else:
+            raise ValueError(f"Unknown algorithm: {algorithm}")
+
+    def __get_edges(self, ids: List[str]) -> Dict[str, List[str]]:
         self.edges = {
             ids[0]: [ids[1], ids[2]],
             ids[1]: [ids[0], ids[3], ids[4]],

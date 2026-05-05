@@ -1,11 +1,31 @@
-from scheduler.core.observer import Observer
 from scheduler.implementation.current_network import CurrentNetwork
+from scheduler.core.observer import Observer
+from scheduler.core.action import Action
 
-# NETWORK_CLASS should be set to the current implementation network class of the AbstractNetwork class
-NETWORK_CLASS = CurrentNetwork
 
-if __name__ == '__main__':
-    # create the current object of the network implementation
-    network = NETWORK_CLASS()
-    observer = Observer(network)
-    observer.run()
+ALGORITHM = "echo"   # "echo" / "tree"
+
+network = CurrentNetwork(algorithm=ALGORITHM)
+observer = Observer(network)
+
+# СТАРТОВЕ ПОВІДОМЛЕННЯ (ДУЖЕ ВАЖЛИВО)
+root = network.nodes[0]
+
+start_message_type = {
+    "wave": "WAVE",
+    "echo": "WAVE",
+    "tree": "TREE"
+}[ALGORITHM]
+
+root.mailbox.add_inbox_action(
+    Action(
+        {
+            "message_type": start_message_type,
+            "sender_id": root.node_id
+        },
+        root.node_id,
+        "start"
+    )
+)
+
+observer.run()

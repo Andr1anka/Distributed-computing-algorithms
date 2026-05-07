@@ -3,29 +3,26 @@ from scheduler.core.observer import Observer
 from scheduler.core.action import Action
 
 
-ALGORITHM = "echo"   # "echo" / "tree"
+ALGORITHM = "election"
 
 network = CurrentNetwork(algorithm=ALGORITHM)
 observer = Observer(network)
 
-# СТАРТОВЕ ПОВІДОМЛЕННЯ (ДУЖЕ ВАЖЛИВО)
-root = network.nodes[0]
+# КОЖЕН ВУЗОЛ Є ІНІЦІАТОРОМ
 
-start_message_type = {
-    "wave": "WAVE",
-    "echo": "WAVE",
-    "tree": "TREE"
-}[ALGORITHM]
+for node in network.nodes:
 
-root.mailbox.add_inbox_action(
-    Action(
-        {
-            "message_type": start_message_type,
-            "sender_id": root.node_id
-        },
-        root.node_id,
-        "start"
+    # стартове повідомлення
+    node.mailbox.add_inbox_action(
+        Action(
+            {
+                "message_type": "WAVE",
+                "sender_id": node.node_id,
+                "wave_id": node.node_id
+            },
+            node.node_id,
+            f"start-{node.node_id}"
+        )
     )
-)
 
 observer.run()

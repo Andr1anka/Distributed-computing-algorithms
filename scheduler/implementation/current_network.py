@@ -6,7 +6,7 @@ from scheduler.abstract.abstract_network import AbstractNetwork
 from scheduler.implementation.wave_node import WaveNode
 from scheduler.implementation.echo_node import EchoNode
 from scheduler.implementation.tree_node import TreeNode
-
+from scheduler.implementation.election_echo_node import ElectionEchoNode
 
 class CurrentNetwork(AbstractNetwork):
     NUMBER_OF_NODES = 8
@@ -32,6 +32,8 @@ class CurrentNetwork(AbstractNetwork):
             return EchoNode
         elif algorithm == "tree":
             return TreeNode
+        elif algorithm == "election":
+            return ElectionEchoNode
         else:
             raise ValueError(f"Unknown algorithm: {algorithm}")
 
